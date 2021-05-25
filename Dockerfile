@@ -1,5 +1,4 @@
-FROM debian:buster
-MAINTAINER "Renien Joseph <renien.john@gmail.com>"
+FROM openjdk:11-jdk-slim-buster
 
 RUN apt-get update \
  && apt-get install -y locales \
@@ -28,21 +27,6 @@ RUN apt-get update \
 ENV PYTHONHASHSEED 0
 ENV PYTHONIOENCODING UTF-8
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-
-# JAVA
-ARG JAVA_MAJOR_VERSION=8
-ARG JAVA_UPDATE_VERSION=281
-ARG JAVA_BUILD_NUMBER=09
-ENV JAVA_HOME /usr/jdk1.${JAVA_MAJOR_VERSION}.0_${JAVA_UPDATE_VERSION}
-
-ENV PATH $PATH:$JAVA_HOME/bin
-RUN curl -C - -LR#OH "Cookie: oraclelicense=accept-securebackup-cookie" -k \
-    http://download.oracle.com/otn-pub/java/jdk/${JAVA_MAJOR_VERSION}u${JAVA_UPDATE_VERSION}-b${JAVA_BUILD_NUMBER}/89d678f2be164786b292527658ca1605/server-jre-${JAVA_MAJOR_VERSION}u${JAVA_UPDATE_VERSION}-linux-x64.tar.gz
-
-RUN tar xvfz $(pwd)/server-jre-${JAVA_MAJOR_VERSION}u${JAVA_UPDATE_VERSION}-linux-x64.tar.gz -C /usr/ \
-  && ln -s $JAVA_HOME /usr/java \
-  && rm -rf $JAVA_HOME/man \
-  && rm $(pwd)/server-jre-${JAVA_MAJOR_VERSION}u${JAVA_UPDATE_VERSION}-linux-x64.tar.gz
 
 # HADOOP
 ENV HADOOP_VERSION 3.2.1
