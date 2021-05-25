@@ -1,4 +1,4 @@
-FROM maven:3.8.1-openjdk-8
+FROM maven:3.6.1-jdk-8
 
 RUN apt-get update \
  && apt-get install -y locales \
