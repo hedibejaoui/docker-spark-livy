@@ -11,7 +11,7 @@
 
 ## Summary
 
-Spark 2.4.7 with Livy 0.7.0
+Spark 3.0.1 with Livy 0.7.0
 
 This is a docker image of [Apache Spark](https://spark.apache.org/) & [Apache Livy](https://livy.apache.org/)
 
@@ -22,7 +22,7 @@ This is a docker image of [Apache Spark](https://spark.apache.org/) & [Apache Li
 |python3|3.8.5|  
 |docker|20.10.2|
 |docker-compose|1.27.4|
-|spark|2.4.7|
+|spark|3.0.1|
 |Livy|0.7.0|
 |Java|1.8.0_271|
 
