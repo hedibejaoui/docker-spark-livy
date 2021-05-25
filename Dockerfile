@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-slim-buster
+FROM maven:3.8.1-openjdk-8
 
 RUN apt-get update \
  && apt-get install -y locales \
@@ -17,7 +17,7 @@ ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update \
  && apt-get install -y curl unzip \
-    python3 python3-setuptools python3-pip wget \
+    python3 python3-setuptools python3-pip git \
  && ln -s /usr/bin/python3 /usr/bin/python \
  && pip3 install py4j \
  && apt-get clean \
@@ -54,18 +54,24 @@ RUN curl -sL --retry 3 \
  && chown -R root:root $SPARK_HOME
 
 # Set install path for Livy
-ENV LIVY_BUILD_VERSION 0.7.0-incubating
+ENV LIVY_BUILD_VERSION 0.8.0-incubating-SNAPSHOT
 ENV LIVY_PACKAGE apache-livy-$LIVY_BUILD_VERSION-bin
 ENV LIVY_HOME /usr/livy
 ENV LIVY_LOG $LIVY_HOME/logs
 
-RUN  apt-get update \
-  && apt-get install -y wget
-
 # Clone Livy repository
 RUN mkdir -p /apps && \
     cd /apps && \
-    wget "http://mirror.23media.de/apache/incubator/livy/$LIVY_BUILD_VERSION/$LIVY_PACKAGE.zip" && \
+    git clone https://github.com/apache/incubator-livy.git && \
+    cd incubator-livy && \
+    mvn clean package -B -V -e \
+        -Pspark-3.0 \
+        -Pthriftserver \
+        -DskipTests \
+        -DskipITs \
+        -Dmaven.javadoc.skip=true && \
+    cd /apps && \
+    mv "incubator-livy/assembly/target/$LIVY_PACKAGE.zip" . && \
     unzip "$LIVY_PACKAGE.zip" && \
     mv $LIVY_PACKAGE $LIVY_HOME && \
     rm "/apps/$LIVY_PACKAGE.zip" && \
