@@ -18,6 +18,7 @@ ENV LC_ALL en_US.UTF-8
 RUN apt-get update \
  && apt-get install -y curl unzip \
     python3 python3-setuptools python3-pip git \
+ && ln -fsv /usr/bin/python3 /usr/bin/python \
  && pip3 install py4j \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
